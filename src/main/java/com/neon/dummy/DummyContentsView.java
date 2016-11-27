@@ -22,6 +22,7 @@ public class DummyContentsView extends VerticalLayout implements SourceComponent
         }
     }
 
+    @Override
     public void give( List< Draggable > draggables ) {
         draggables.forEach( this::add );
     }

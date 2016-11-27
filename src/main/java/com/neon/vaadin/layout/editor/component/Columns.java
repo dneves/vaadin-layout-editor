@@ -15,25 +15,22 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-public class Columns extends VerticalLayout {
+public class Columns extends VerticalLayout implements LayoutEditorComponent {
 
     private final ActionsHorizontalLayout actions = new ActionsHorizontalLayout();
 
-    private final EditorViewFactory editorViewFactory;
+    private final HorizontalSplitPanel split = new HorizontalSplitPanel();
 
     private final Block left;
 
     private final Block right;
 
-    private final HorizontalSplitPanel split = new HorizontalSplitPanel();
 
-
-    public Columns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
-        this.editorViewFactory = editorViewFactory;
-
+    protected Columns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         this.left = new Block( editorViewFactory, sourceComponentsHolder );
         this.right = new Block( editorViewFactory, sourceComponentsHolder );
 
@@ -106,17 +103,25 @@ public class Columns extends VerticalLayout {
         return settings;
     }
 
+    @Override
     public void addAction(Action action, Button.ClickListener listener ) {
         actions.addAction( action, listener  );
     }
 
-    public List<Draggable> getModel() {
-        List<Draggable> leftModel = left.getModel();
-        List<Draggable> rightModel = right.getModel();
-        List< Draggable > result = new ArrayList<>( leftModel.size() + rightModel.size() );
-        result.addAll( leftModel );
-        result.addAll( rightModel );
-        return result;
+    @Override
+    public List< List<Draggable> > getModel() {
+        return Arrays.asList( getModel( left ), getModel( right ) );
+    }
+
+    @Override
+    public void setModel( List< List<Draggable> > draggables) {
+        left.setModel(Collections.singletonList(draggables.get(0)));
+        right.setModel(Collections.singletonList(draggables.get(1)));
+    }
+
+    private List< Draggable > getModel( Block block ) {
+        List<List<Draggable>> models = block.getModel();
+        return models.get( 0 );
     }
 
 }

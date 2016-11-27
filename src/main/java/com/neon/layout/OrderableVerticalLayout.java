@@ -57,7 +57,7 @@ public abstract class OrderableVerticalLayout< T extends Draggable > extends Ver
         super.removeComponent( spacer );
     }
 
-    protected void handle( Component c, int index ) {
+    public void handle( Component c, int index ) {
         if ( c instanceof DraggableComponent ) {
             DraggableComponent droppableComponent = create( (DraggableComponent) c );
             if ( droppableComponent == null ) {

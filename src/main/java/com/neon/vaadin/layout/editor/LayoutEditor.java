@@ -4,13 +4,18 @@ import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.component.Block;
+import com.neon.vaadin.layout.editor.component.BlockFactory;
 import com.neon.vaadin.layout.editor.component.Columns;
-import com.vaadin.event.Action;
+import com.neon.vaadin.layout.editor.component.ColumnsFactory;
+import com.neon.vaadin.layout.editor.component.EditorComponentDecorator;
+import com.neon.vaadin.layout.editor.component.LayoutEditorComponent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LayoutEditor extends VerticalLayout {
@@ -31,10 +36,14 @@ public class LayoutEditor extends VerticalLayout {
 
     private final SourceComponentsHolder sourceComponentsHolder;
 
+    private final EditorComponentDecorator editorComponentDecorator;
+
 
     public LayoutEditor( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         this.editorViewFactory = editorViewFactory;
         this.sourceComponentsHolder = sourceComponentsHolder;
+
+        this.editorComponentDecorator = new EditorComponentDecorator(sourceComponentsHolder);
 
         this.addStyleName( "layout-editor" );
         this.setSpacing( true );
@@ -54,39 +63,37 @@ public class LayoutEditor extends VerticalLayout {
         this.addComponent( actions );
     }
 
-    private void addBlock() {
-        Block block = new Block(editorViewFactory, sourceComponentsHolder);
-        block.addStyleName( "component" );
-
-        block.addAction( new Action("X"), event -> {
-            List<Draggable> models = block.getModel();
-
-            layout.removeComponent( block );
-
-            sourceComponentsHolder.give( models );
+    public void setModel(List<LayoutEditorComponent> components) {
+        components.forEach( component -> {
+            editorComponentDecorator.decorate( component, layout );
+            layout.addComponent( component );
         } );
-        block.addAction( new Action( "up"), event -> layout.moveUp( block ));
-        block.addAction( new Action( "down"), event -> layout.moveDown( block ));
+    }
+
+    public List< LayoutEditorComponent > getModel() {
+        List< LayoutEditorComponent > model = new ArrayList<>( layout.getComponentCount() );
+
+        for (Component component : layout) {
+            if ( component instanceof LayoutEditorComponent ) {
+                model.add((LayoutEditorComponent) component);
+            }
+        }
+
+        return model;
+    }
+
+    private void addBlock() {
+        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder);
+
+        editorComponentDecorator.decorate( block, layout );
 
         layout.addComponent( block );
     }
 
     private void addColumns() {
+        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder );
 
-
-
-        Columns columns = new Columns(editorViewFactory, sourceComponentsHolder);
-        columns.addStyleName( "component" );
-
-        columns.addAction( new Action("X"), event -> {
-            List< Draggable > models = columns.getModel();
-
-            layout.removeComponent( columns );
-
-            sourceComponentsHolder.give( models );
-        } );
-        columns.addAction( new Action( "up"), event -> layout.moveUp( columns ) );
-        columns.addAction( new Action( "down"), event -> layout.moveDown( columns ) );
+        editorComponentDecorator.decorate( columns, layout );
 
         layout.addComponent( columns );
     }
