@@ -84,7 +84,7 @@ public class MyUI extends UI {
             EditorComponentModel editorComponentModel = component.getModel();
             if ( editorComponentModel instanceof BlockComponentModel ) {
                 List<Draggable> contents = ((BlockComponentModel) editorComponentModel).getContents();
-                sb.append( component + " => " + contents.size() );
+                sb.append(component).append(" => ").append(contents.size());
                 sb.append( "<br>" );
                 contents.forEach( d -> {
                     sb.append( d.getModel().getId() );
@@ -95,16 +95,16 @@ public class MyUI extends UI {
                 Object sizes = ((ColumnsComponentModel) editorComponentModel).getSizes();
                 List<Draggable> contents1 = ((ColumnsComponentModel) editorComponentModel).getColumn1().getContents();
                 List<Draggable> contents2 = ((ColumnsComponentModel) editorComponentModel).getColumn2().getContents();
-                sb.append( component + " => " + sizes + " [ " + contents1.size() + ", " + contents2.size() + " ]" );
+                sb.append(component).append(" => ").append(sizes).append(" [ ").append(contents1.size()).append(", ").append(contents2.size()).append(" ]");
 
                 sb.append( "<br>[ " );
                 contents1.forEach( d -> {
-                    sb.append( d.getModel().getId() + " " );
+                    sb.append(d.getModel().getId()).append(" ");
                 } );
                 sb.append( "]" );
                 sb.append( "<br>[ " );
                 contents2.forEach( d -> {
-                    sb.append( d.getModel().getId() + " " );
+                    sb.append(d.getModel().getId()).append(" ");
                 } );
                 sb.append( "]<br><br>" );
             }

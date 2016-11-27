@@ -42,6 +42,7 @@ public class Block extends VerticalLayout implements LayoutEditorComponent<Block
         addComponent( actions );
         addComponent( contents );
 
+        contents.setSpacing( true );
         contents.addStyleName( "component-block-contents" );
 
         addStyleName( "component-block" );
