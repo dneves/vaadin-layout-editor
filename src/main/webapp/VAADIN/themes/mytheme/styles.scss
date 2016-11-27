@@ -1,0 +1,32 @@
+@import "mytheme.scss";
+@import "addons.scss";
+
+// This file prefixes all rules with the theme name to avoid causing conflicts with other themes.
+// The actual styles should be defined in mytheme.scss
+
+.mytheme {
+  @include addons;
+  @include mytheme;
+
+  .component {
+    padding: 10px;
+    border: 1px dashed gray;
+  }
+
+  .component-block {
+
+    .component-block-contents {
+      border: 1px dashed #cccccc;
+    }
+  }
+
+  .component-columns {
+
+    .v-splitpanel-horizontal .v-margin-right {
+      padding-right: 10px;
+    }
+    .v-splitpanel-horizontal .v-margin-left {
+      padding-left: 10px;
+    }
+  }
+}
