@@ -1,6 +1,5 @@
 package com.neon.vaadin.layout.editor;
 
-import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.component.Block;
@@ -20,9 +19,9 @@ import java.util.List;
 
 public class LayoutEditor extends VerticalLayout {
 
-    private final OrderableVerticalLayout<Draggable> layout = new OrderableVerticalLayout< Draggable>( "adicione componentes" ) {
+    private final OrderableVerticalLayout layout = new OrderableVerticalLayout( "adicione componentes" ) {
         @Override
-        protected DraggableComponent< Draggable > create( DraggableComponent< Draggable > draggable) {
+        protected DraggableComponent create( DraggableComponent draggable) {
             return null;
         }
     };
@@ -68,7 +67,11 @@ public class LayoutEditor extends VerticalLayout {
 
     public void setModel(List<LayoutEditorComponent> components) {
         components.forEach( component -> {
-            editorComponentDecorator.decorate( component, layout );
+            if ( component instanceof Block ) {
+                editorComponentDecorator.decorate((Block) component, layout );
+            } else if ( component instanceof Columns ) {
+                editorComponentDecorator.decorate((Columns) component, layout );
+            }
             layout.addComponent( component );
         } );
     }

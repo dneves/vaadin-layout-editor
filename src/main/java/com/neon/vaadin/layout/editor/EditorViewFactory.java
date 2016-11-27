@@ -4,6 +4,6 @@ import com.neon.dnd.Draggable;
 
 public interface EditorViewFactory {
 
-    < T > Draggable< T > create( T model );
+    < T extends IdHolder > Draggable< T > create( T model );
 
 }

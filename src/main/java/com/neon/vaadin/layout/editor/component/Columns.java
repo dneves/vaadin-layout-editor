@@ -1,9 +1,10 @@
 package com.neon.vaadin.layout.editor.component;
 
-import com.neon.dnd.Draggable;
 import com.neon.layout.ActionsHorizontalLayout;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.SourceComponentsHolder;
+import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
+import com.neon.vaadin.layout.editor.component.model.ColumnsComponentModel;
 import com.vaadin.data.Property;
 import com.vaadin.event.Action;
 import com.vaadin.shared.ui.MarginInfo;
@@ -15,11 +16,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-public class Columns extends VerticalLayout implements LayoutEditorComponent {
+public class Columns extends VerticalLayout implements LayoutEditorComponent<ColumnsComponentModel> {
 
     private final ActionsHorizontalLayout actions = new ActionsHorizontalLayout();
 
@@ -29,8 +26,10 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent {
 
     private final Block right;
 
+    private final OptionGroup optionGroup = new OptionGroup();
 
-    protected Columns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
+
+    Columns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
         this.left = new Block( editorViewFactory, sourceComponentsHolder );
         this.right = new Block( editorViewFactory, sourceComponentsHolder );
 
@@ -67,7 +66,6 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent {
     }
 
     private OptionGroup createOptions() {
-        OptionGroup optionGroup = new OptionGroup();
         optionGroup.setNullSelectionAllowed( false );
         optionGroup.setHtmlContentAllowed( true );
 
@@ -109,22 +107,27 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent {
     }
 
     @Override
-    public List< List<Draggable> > getModel() {
-        return Arrays.asList( getModel( left ), getModel( right ) );
+    public void setModel(ColumnsComponentModel model) {
+        optionGroup.select( model.getSizes() );
+
+        BlockComponentModel column1 = model.getColumn1();
+        left.setModel( column1 );
+
+        BlockComponentModel column2 = model.getColumn2();
+        right.setModel( column2 );
     }
 
     @Override
-    public void setModel( List< List<Draggable> > draggables) {
-        left.setModel(Collections.singletonList(draggables.get(0)));
-        right.setModel(Collections.singletonList(draggables.get(1)));
+    public ColumnsComponentModel getModel() {
+        ColumnsComponentModel model = new ColumnsComponentModel();
+        model.setSizes( optionGroup.getValue() );
+        model.setColumn1( left.getModel() );
+        model.setColumn2( right.getModel() );
+
+        return model;
     }
 
-    private List< Draggable > getModel( Block block ) {
-        List<List<Draggable>> models = block.getModel();
-        return models.get( 0 );
-    }
-
-    public void setRemoveFromExternalSource( boolean removeFromExternalSource ) {
+    void setRemoveFromExternalSource(boolean removeFromExternalSource) {
         this.left.setRemoveFromExternalSource( removeFromExternalSource );
         this.right.setRemoveFromExternalSource( removeFromExternalSource );
     }

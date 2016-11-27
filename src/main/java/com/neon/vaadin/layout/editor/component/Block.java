@@ -6,6 +6,7 @@ import com.neon.layout.ActionsHorizontalLayout;
 import com.neon.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.SourceComponentsHolder;
+import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
 import com.vaadin.event.Action;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Block extends VerticalLayout implements LayoutEditorComponent {
+public class Block extends VerticalLayout implements LayoutEditorComponent<BlockComponentModel> {
 
     private final EditorViewFactory editorViewFactory;
 
-    private final OrderableVerticalLayout< Draggable > contents = new OrderableVerticalLayout< Draggable >( "arraste para aqui" ) {
+    private final OrderableVerticalLayout contents = new OrderableVerticalLayout( "arraste para aqui" ) {
         @Override
-        protected DraggableComponent< Draggable > create( DraggableComponent< Draggable > draggableComponent) {
+        protected DraggableComponent create( DraggableComponent draggableComponent) {
             Draggable draggable = draggableComponent.getRoot();
             return Block.this.create( draggable );
         }
@@ -32,7 +33,7 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
     private final SourceComponentsHolder sourceComponentsHolder;
 
 
-    protected Block( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
+    Block(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
         this.editorViewFactory = editorViewFactory;
         this.sourceComponentsHolder = sourceComponentsHolder;
 
@@ -51,7 +52,7 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
         return contents.isRemoveFromExternalSource();
     }
 
-    public void setRemoveFromExternalSource(boolean removeFromExternalSource ) {
+    void setRemoveFromExternalSource(boolean removeFromExternalSource) {
         contents.setRemoveFromExternalSource( removeFromExternalSource );
     }
 
@@ -62,7 +63,16 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
     }
 
     @Override
-    public List< List< Draggable > > getModel() {
+    public void setModel(BlockComponentModel model) {
+        List<Draggable> contents = model.getContents();
+        contents.forEach( d -> {
+            DraggableComponent component = create( d );
+            this.contents.handle( component, this.contents.getComponentCount() );
+        });
+    }
+
+    @Override
+    public BlockComponentModel getModel() {
         List< Draggable > result = new ArrayList<>( contents.getComponentCount() );
 
         for (Component component : contents) {
@@ -71,20 +81,12 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
             }
         }
 
-        return Collections.singletonList(result);
+        BlockComponentModel model = new BlockComponentModel();
+        model.setContents( result );
+        return model;
     }
 
-    @Override
-    public void setModel( List< List<Draggable> > draggables) {
-        draggables.forEach( ds -> {
-            ds.forEach( d -> {
-                DraggableComponent<Draggable> component = create( d );
-                contents.handle( component, contents.getComponentCount() );
-            } );
-        } );
-    }
-
-    private DraggableComponent< Draggable > create( Draggable draggable ) {
+    private DraggableComponent create(Draggable draggable ) {
         Draggable component = editorViewFactory.create(draggable.getModel());
         if ( component == null ) {
             return null;
@@ -92,7 +94,7 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
 
         BlockElementWrapper elementWrapper = new BlockElementWrapper(component);
 
-        DraggableComponent< Draggable > cDraggableComponent = new DraggableComponent<>( elementWrapper );
+        DraggableComponent cDraggableComponent = new DraggableComponent( elementWrapper );
 
         elementWrapper.addAction( new Action( "X" ), event -> {
             Block.this.contents.removeComponent( cDraggableComponent );

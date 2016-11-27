@@ -1,6 +1,5 @@
 package com.neon.layout;
 
-import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.dnd.DroppableComponent;
 import com.vaadin.event.dd.DropHandler;
@@ -9,7 +8,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public abstract class OrderableVerticalLayout< T extends Draggable > extends VerticalLayout {
+public abstract class OrderableVerticalLayout extends VerticalLayout {
 
     private class Spacer extends DroppableComponent< VerticalLayout > {
 
@@ -78,7 +77,7 @@ public abstract class OrderableVerticalLayout< T extends Draggable > extends Ver
         }
     }
 
-    protected abstract DraggableComponent< T > create( DraggableComponent< T > draggable );
+    protected abstract DraggableComponent create( DraggableComponent draggable );
 
     public void moveUp( Component c ) {
         int index = getComponentIndex( c );

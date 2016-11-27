@@ -1,19 +1,17 @@
 package com.neon.vaadin.layout.editor.component;
 
-import com.neon.dnd.Draggable;
+import com.neon.vaadin.layout.editor.component.model.EditorComponentModel;
 import com.vaadin.event.Action;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
-import java.util.List;
-
-public interface LayoutEditorComponent extends Component {
+public interface LayoutEditorComponent< M extends EditorComponentModel > extends Component {
 
     void addAction(Action action, Button.ClickListener listener );
 
-    void setModel( List< List< Draggable > > draggables );
+    void setModel( M model );
 
-    List< List< Draggable > > getModel();
+    M getModel();
 
     boolean isRemoveFromExternalSource();
 

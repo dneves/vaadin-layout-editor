@@ -10,7 +10,7 @@ public class ContentView extends VerticalLayout implements Draggable< Content > 
 
     public ContentView(Content content) {
         this.content = content;
-        addComponent( new Label( content.id ) );
+        addComponent( new Label( content.getId() ) );
     }
 
     @Override

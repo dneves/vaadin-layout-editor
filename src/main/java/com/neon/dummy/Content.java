@@ -1,11 +1,17 @@
 package com.neon.dummy;
 
-public class Content {
+import com.neon.vaadin.layout.editor.IdHolder;
 
-    public String id;
+public class Content implements IdHolder {
+
+    private String id;
 
     public Content(String id) {
         this.id = id;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
 }

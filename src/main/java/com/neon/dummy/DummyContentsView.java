@@ -2,6 +2,7 @@ package com.neon.dummy;
 
 import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
+import com.neon.vaadin.layout.editor.IdHolder;
 import com.neon.vaadin.layout.editor.SourceComponentsHolder;
 import com.vaadin.ui.VerticalLayout;
 
@@ -28,7 +29,7 @@ public class DummyContentsView extends VerticalLayout implements SourceComponent
     }
 
     private void add( Draggable draggable ) {
-        Object model = draggable.getModel();
+        IdHolder model = draggable.getModel();
         if ( model instanceof Content ) {
             DraggableComponent< Content > draggableComponent = new DraggableComponent<>( new ContentView( ( Content ) model) );
             draggableComponent.setSizeUndefined();

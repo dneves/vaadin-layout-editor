@@ -12,12 +12,17 @@ import com.neon.vaadin.layout.editor.component.BlockFactory;
 import com.neon.vaadin.layout.editor.component.Columns;
 import com.neon.vaadin.layout.editor.component.ColumnsFactory;
 import com.neon.vaadin.layout.editor.component.LayoutEditorComponent;
+import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
+import com.neon.vaadin.layout.editor.component.model.ColumnsComponentModel;
+import com.neon.vaadin.layout.editor.component.model.EditorComponentModel;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 import javax.servlet.annotation.WebServlet;
 import java.util.LinkedList;
@@ -45,6 +50,8 @@ public class MyUI extends UI {
         final LayoutEditor editor = new LayoutEditor( editorViewFactory, dummyContentsView );
         editor.setRemoveFromExternalSource( removeFromExternalSource );
 
+        VerticalLayout root = new VerticalLayout();
+
         final HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
         layout.setSpacing( true );
@@ -54,14 +61,49 @@ public class MyUI extends UI {
         layout.setExpandRatio( editor, 0.7f );
         layout.setExpandRatio( dummyContentsView, 0.3f );
 
-        setContent( layout );
+        root.addComponent( layout );
+        root.addComponent( new Button( "save", listener -> {
+            List<LayoutEditorComponent> model = editor.getModel();
+            model.forEach( component -> {
+                EditorComponentModel editorComponentModel = component.getModel();
+                if ( editorComponentModel instanceof BlockComponentModel ) {
+                    List<Draggable> contents = ((BlockComponentModel) editorComponentModel).getContents();
+                    System.out.println( component + " => " + contents.size() );
+                    contents.forEach( d -> {
+                        System.out.println( "\t" + d.getModel().getId() );
+                    } );
+                } else if ( editorComponentModel instanceof ColumnsComponentModel ) {
+                    Object sizes = ((ColumnsComponentModel) editorComponentModel).getSizes();
+                    List<Draggable> contents1 = ((ColumnsComponentModel) editorComponentModel).getColumn1().getContents();
+                    List<Draggable> contents2 = ((ColumnsComponentModel) editorComponentModel).getColumn2().getContents();
+                    System.out.println( component + " => " + sizes + " [ " + contents1.size() + ", " + contents2.size() + " ]" );
+
+                    System.out.print( "\t[ " );
+                    contents1.forEach( d -> {
+                        System.out.print( d.getModel().getId() + " " );
+                    } );
+                    System.out.println( "]" );
+                    System.out.print( "\t[ " );
+                    contents2.forEach( d -> {
+                        System.out.print( d.getModel().getId() + " " );
+                    } );
+                    System.out.println( "]" );
+                }
+            } );
+        } ) );
+        setContent( root );
 
 
+        setModel( editor, editorViewFactory, dummyContentsView );
+    }
+
+
+    private void setModel( LayoutEditor editor, EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         List<LayoutEditorComponent > model = new LinkedList<>();
 
-        model.add( createBlock( editorViewFactory, dummyContentsView ) );
-        model.add( createColumns( editorViewFactory, dummyContentsView ) );
-        model.add( createBlock( editorViewFactory, dummyContentsView ) );
+        model.add( createBlock( editorViewFactory, sourceComponentsHolder ) );
+        model.add( createColumns( editorViewFactory, sourceComponentsHolder ) );
+        model.add( createBlock( editorViewFactory, sourceComponentsHolder ) );
 
         editor.setModel( model );
     }
@@ -69,32 +111,40 @@ public class MyUI extends UI {
     private LayoutEditorComponent createBlock(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
         Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
-        List<List<Draggable>> model = new LinkedList<>();
         List<Draggable> draggables = new LinkedList<>();
         draggables.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
         draggables.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-        model.add( draggables );
-        block.setModel( model );
 
+        BlockComponentModel blockComponentModel = new BlockComponentModel();
+        blockComponentModel.setContents( draggables );
+
+        block.setModel( blockComponentModel );
         return block;
     }
 
     private LayoutEditorComponent createColumns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
         Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
-        List<List<Draggable>> model = new LinkedList<>();
-
         List<Draggable> left = new LinkedList<>();
         left.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
         left.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-        model.add( left );
+
+        BlockComponentModel blockComponentModel1 = new BlockComponentModel();
+        blockComponentModel1.setContents( left );
 
         List<Draggable> right = new LinkedList<>();
         right.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
         right.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-        model.add( right );
 
-        columns.setModel( model );
+        BlockComponentModel blockComponentModel2 = new BlockComponentModel();
+        blockComponentModel2.setContents( right );
+
+        ColumnsComponentModel columnsComponentModel = new ColumnsComponentModel();
+        columnsComponentModel.setSizes( "left" );
+        columnsComponentModel.setColumn1( blockComponentModel1 );
+        columnsComponentModel.setColumn2( blockComponentModel2 );
+
+        columns.setModel( columnsComponentModel );
 
         return columns;
     }

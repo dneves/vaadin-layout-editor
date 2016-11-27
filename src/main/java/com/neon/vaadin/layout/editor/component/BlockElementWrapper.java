@@ -2,6 +2,7 @@ package com.neon.vaadin.layout.editor.component;
 
 import com.neon.dnd.Draggable;
 import com.neon.layout.ActionsHorizontalLayout;
+import com.neon.vaadin.layout.editor.IdHolder;
 import com.vaadin.event.Action;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
@@ -25,7 +26,7 @@ public class BlockElementWrapper extends VerticalLayout implements Draggable {
     }
 
     @Override
-    public Object getModel() {
+    public IdHolder getModel() {
         return draggable.getModel();
     }
 
