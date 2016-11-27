@@ -17,10 +17,12 @@ import com.neon.vaadin.layout.editor.component.model.ColumnsComponentModel;
 import com.neon.vaadin.layout.editor.component.model.EditorComponentModel;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -63,33 +65,7 @@ public class MyUI extends UI {
 
         root.addComponent( layout );
         root.addComponent( new Button( "save", listener -> {
-            List<LayoutEditorComponent> model = editor.getModel();
-            model.forEach( component -> {
-                EditorComponentModel editorComponentModel = component.getModel();
-                if ( editorComponentModel instanceof BlockComponentModel ) {
-                    List<Draggable> contents = ((BlockComponentModel) editorComponentModel).getContents();
-                    System.out.println( component + " => " + contents.size() );
-                    contents.forEach( d -> {
-                        System.out.println( "\t" + d.getModel().getId() );
-                    } );
-                } else if ( editorComponentModel instanceof ColumnsComponentModel ) {
-                    Object sizes = ((ColumnsComponentModel) editorComponentModel).getSizes();
-                    List<Draggable> contents1 = ((ColumnsComponentModel) editorComponentModel).getColumn1().getContents();
-                    List<Draggable> contents2 = ((ColumnsComponentModel) editorComponentModel).getColumn2().getContents();
-                    System.out.println( component + " => " + sizes + " [ " + contents1.size() + ", " + contents2.size() + " ]" );
-
-                    System.out.print( "\t[ " );
-                    contents1.forEach( d -> {
-                        System.out.print( d.getModel().getId() + " " );
-                    } );
-                    System.out.println( "]" );
-                    System.out.print( "\t[ " );
-                    contents2.forEach( d -> {
-                        System.out.print( d.getModel().getId() + " " );
-                    } );
-                    System.out.println( "]" );
-                }
-            } );
+            onSave( editor );
         } ) );
         setContent( root );
 
@@ -97,6 +73,46 @@ public class MyUI extends UI {
         setModel( editor, editorViewFactory, dummyContentsView );
     }
 
+
+
+    private void onSave( LayoutEditor editor ) {
+        List<LayoutEditorComponent> model = editor.getModel();
+
+        StringBuilder sb = new StringBuilder();
+
+        model.forEach( component -> {
+            EditorComponentModel editorComponentModel = component.getModel();
+            if ( editorComponentModel instanceof BlockComponentModel ) {
+                List<Draggable> contents = ((BlockComponentModel) editorComponentModel).getContents();
+                sb.append( component + " => " + contents.size() );
+                sb.append( "<br>" );
+                contents.forEach( d -> {
+                    sb.append( d.getModel().getId() );
+                    sb.append( " " );
+                } );
+                sb.append( "<br><br>" );
+            } else if ( editorComponentModel instanceof ColumnsComponentModel ) {
+                Object sizes = ((ColumnsComponentModel) editorComponentModel).getSizes();
+                List<Draggable> contents1 = ((ColumnsComponentModel) editorComponentModel).getColumn1().getContents();
+                List<Draggable> contents2 = ((ColumnsComponentModel) editorComponentModel).getColumn2().getContents();
+                sb.append( component + " => " + sizes + " [ " + contents1.size() + ", " + contents2.size() + " ]" );
+
+                sb.append( "<br>[ " );
+                contents1.forEach( d -> {
+                    sb.append( d.getModel().getId() + " " );
+                } );
+                sb.append( "]" );
+                sb.append( "<br>[ " );
+                contents2.forEach( d -> {
+                    sb.append( d.getModel().getId() + " " );
+                } );
+                sb.append( "]<br><br>" );
+            }
+        } );
+
+        Notification notification = new Notification("", sb.toString(), Notification.Type.WARNING_MESSAGE, true);
+        notification.show(Page.getCurrent() );
+    }
 
     private void setModel( LayoutEditor editor, EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         List<LayoutEditorComponent > model = new LinkedList<>();

@@ -47,6 +47,8 @@ public class LayoutEditor extends VerticalLayout {
 
         this.editorComponentDecorator = new EditorComponentDecorator(sourceComponentsHolder);
 
+        setCaption( "Layout");
+
         this.addStyleName( "layout-editor" );
         this.setSpacing( true );
 
