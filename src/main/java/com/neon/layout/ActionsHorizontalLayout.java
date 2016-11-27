@@ -14,6 +14,9 @@ public class ActionsHorizontalLayout extends HorizontalLayout {
 
     public void addAction( Action action, Button.ClickListener listener ) {
         Button button = new Button(action.getCaption(), action.getIcon());
+        button.addStyleName( "action" );
+        button.setWidth(24, Unit.PIXELS);
+        button.setHeight(24, Unit.PIXELS);
         button.addClickListener( listener );
         addComponent( button );
         setVisible( true );

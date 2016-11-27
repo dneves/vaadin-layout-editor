@@ -3,13 +3,11 @@ package com.neon.dummy;
 import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.vaadin.layout.editor.IdHolder;
-import com.neon.vaadin.layout.editor.SourceComponentsHolder;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
 
-public class DummyContentsView extends VerticalLayout implements SourceComponentsHolder {
+public class DummyContentsView extends VerticalLayout {
 
     private final DummyContentProvider dummyContentProvider = new DummyContentProvider();
 
@@ -27,7 +25,6 @@ public class DummyContentsView extends VerticalLayout implements SourceComponent
         }
     }
 
-    @Override
     public void give( List< Draggable > draggables ) {
         draggables.forEach( this::add );
     }

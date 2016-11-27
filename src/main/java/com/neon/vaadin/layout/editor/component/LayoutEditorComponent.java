@@ -13,6 +13,4 @@ public interface LayoutEditorComponent< M extends EditorComponentModel > extends
 
     M getModel();
 
-    boolean isRemoveFromExternalSource();
-
 }

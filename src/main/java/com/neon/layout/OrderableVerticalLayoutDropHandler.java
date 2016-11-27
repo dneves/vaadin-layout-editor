@@ -19,18 +19,8 @@ public class OrderableVerticalLayoutDropHandler implements DropHandler {
 
     private final OrderableVerticalLayout targetLayout;
 
-    private boolean removeFromExternalSource = true;
-
     public OrderableVerticalLayoutDropHandler(OrderableVerticalLayout targetLayout) {
         this.targetLayout = targetLayout;
-    }
-
-    public void setRemoveFromExternalSource(boolean removeFromExternalSource) {
-        this.removeFromExternalSource = removeFromExternalSource;
-    }
-
-    public boolean isRemoveFromExternalSource() {
-        return removeFromExternalSource;
     }
 
     @Override
@@ -44,8 +34,10 @@ public class OrderableVerticalLayoutDropHandler implements DropHandler {
         int index = getDropIndex( sourceComponent, dropTargetData );
         if ( parentSourceComponent != targetLayout ) {
             // items from outside layout
-            if ( removeFromExternalSource ) {
-                parentSourceComponent.removeComponent( sourceComponent );
+            if ( parentSourceComponent instanceof OrderableVerticalLayout ) {
+                if ( ((OrderableVerticalLayout) parentSourceComponent).allowRemoveFromSource() ) {
+                    parentSourceComponent.removeComponent(sourceComponent);
+                }
             }
             targetLayout.handle( sourceComponent, index );
         } else {
@@ -92,4 +84,5 @@ public class OrderableVerticalLayoutDropHandler implements DropHandler {
     public AcceptCriterion getAcceptCriterion() {
         return AcceptAll.get();
     }
+
 }

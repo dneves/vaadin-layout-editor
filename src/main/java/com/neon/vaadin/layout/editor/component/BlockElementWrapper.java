@@ -4,6 +4,7 @@ import com.neon.dnd.Draggable;
 import com.neon.layout.ActionsHorizontalLayout;
 import com.neon.vaadin.layout.editor.IdHolder;
 import com.vaadin.event.Action;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 
@@ -16,6 +17,10 @@ public class BlockElementWrapper extends VerticalLayout implements Draggable {
 
     public BlockElementWrapper( Draggable draggable ) {
         this.draggable = draggable;
+        addStyleName( "block-element-container" );
+
+        setSpacing( true );
+        setMargin( true );
 
         addComponent( actions );
         addComponent( draggable );

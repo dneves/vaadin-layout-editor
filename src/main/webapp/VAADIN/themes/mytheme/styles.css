@@ -12990,15 +12990,32 @@ div.v-layout.v-horizontal.v-widget {
 	border: 1px dashed gray;
 }
 
+.mytheme .component .actions-container .action {
+	padding: 0;
+}
+
+.mytheme .component .actions-container .action .v-icon {
+	vertical-align: inherit;
+}
+
+.mytheme .component-block .block-element-container {
+	padding: 10px;
+	border: 1px dashed lightgray;
+}
+
 .mytheme .component-block .component-block-contents {
 	border: 1px dashed #cccccc;
 }
 
 .mytheme .component-columns .v-splitpanel-horizontal .v-margin-right {
-	padding-right: 10px;
+	padding-right: 5px;
 }
 
 .mytheme .component-columns .v-splitpanel-horizontal .v-margin-left {
-	padding-left: 10px;
+	padding-left: 5px;
 	padding-right: 1px;
+}
+
+.mytheme .component-columns .size .v-radiobutton {
+	display: inline;
 }

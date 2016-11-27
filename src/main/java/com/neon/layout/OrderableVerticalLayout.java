@@ -48,14 +48,6 @@ public abstract class OrderableVerticalLayout extends VerticalLayout {
         });
     }
 
-    public void setRemoveFromExternalSource( boolean removeFromExternalSource ) {
-        dropHandler.setRemoveFromExternalSource( removeFromExternalSource );
-    }
-
-    public boolean isRemoveFromExternalSource() {
-        return dropHandler.isRemoveFromExternalSource();
-    }
-
 
     private void addSpacer() {
         super.addComponent( spacer );
@@ -78,6 +70,8 @@ public abstract class OrderableVerticalLayout extends VerticalLayout {
     }
 
     protected abstract DraggableComponent create( DraggableComponent draggable );
+
+    protected abstract boolean allowRemoveFromSource();
 
     public void moveUp( Component c ) {
         int index = getComponentIndex( c );

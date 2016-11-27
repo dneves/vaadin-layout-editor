@@ -8,6 +8,7 @@ import com.neon.vaadin.layout.editor.component.Columns;
 import com.neon.vaadin.layout.editor.component.ColumnsFactory;
 import com.neon.vaadin.layout.editor.component.EditorComponentDecorator;
 import com.neon.vaadin.layout.editor.component.LayoutEditorComponent;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -24,6 +25,11 @@ public class LayoutEditor extends VerticalLayout {
         protected DraggableComponent create( DraggableComponent draggable) {
             return null;
         }
+
+        @Override
+        protected boolean allowRemoveFromSource() {
+            return false;
+        }
     };
 
     private final Button buttonBlock = new Button( "Bloco", event -> addBlock());
@@ -33,19 +39,13 @@ public class LayoutEditor extends VerticalLayout {
 
     private final EditorViewFactory editorViewFactory;
 
-    private final SourceComponentsHolder sourceComponentsHolder;
-
     private final EditorComponentDecorator editorComponentDecorator;
 
 
-    private boolean removeFromExternalSource = true;
-
-
-    public LayoutEditor( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
+    public LayoutEditor( EditorViewFactory editorViewFactory ) {
         this.editorViewFactory = editorViewFactory;
-        this.sourceComponentsHolder = sourceComponentsHolder;
 
-        this.editorComponentDecorator = new EditorComponentDecorator(sourceComponentsHolder);
+        this.editorComponentDecorator = new EditorComponentDecorator();
 
         setCaption( "Layout");
 
@@ -58,6 +58,9 @@ public class LayoutEditor extends VerticalLayout {
 
         Panel layoutContainer = new Panel( layout );
         this.addComponent( layoutContainer );
+
+        buttonBlock.setIcon( new ThemeResource( "icons/block-24x24.png" ) );
+        buttonColumns.setIcon( new ThemeResource( "icons/columns-24x24.png" ) );
 
         HorizontalLayout actions = new HorizontalLayout();
         actions.setSpacing( true );
@@ -91,7 +94,7 @@ public class LayoutEditor extends VerticalLayout {
     }
 
     private void addBlock() {
-        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
+        Block block = BlockFactory.create( editorViewFactory );
 
         editorComponentDecorator.decorate( block, layout );
 
@@ -99,19 +102,11 @@ public class LayoutEditor extends VerticalLayout {
     }
 
     private void addColumns() {
-        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
+        Columns columns = ColumnsFactory.create( editorViewFactory );
 
         editorComponentDecorator.decorate( columns, layout );
 
         layout.addComponent( columns );
     }
 
-    public void setRemoveFromExternalSource(boolean removeFromExternalSource) {
-        this.removeFromExternalSource = removeFromExternalSource;
-        layout.setRemoveFromExternalSource( removeFromExternalSource );
-    }
-
-    public boolean isRemoveFromExternalSource() {
-        return removeFromExternalSource;
-    }
 }

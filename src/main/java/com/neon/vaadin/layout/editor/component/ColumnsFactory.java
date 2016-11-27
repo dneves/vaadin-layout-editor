@@ -1,7 +1,6 @@
 package com.neon.vaadin.layout.editor.component;
 
 import com.neon.vaadin.layout.editor.EditorViewFactory;
-import com.neon.vaadin.layout.editor.SourceComponentsHolder;
 
 public class ColumnsFactory {
 
@@ -9,11 +8,9 @@ public class ColumnsFactory {
 
     }
 
-    public static Columns create(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder,
-                                 boolean removeFromExternalSource ) {
-        Columns columns = new Columns(editorViewFactory, sourceComponentsHolder);
+    public static Columns create( EditorViewFactory editorViewFactory ) {
+        Columns columns = new Columns( editorViewFactory );
         columns.addStyleName( "component" );
-        columns.setRemoveFromExternalSource( removeFromExternalSource );
         return columns;
     }
 

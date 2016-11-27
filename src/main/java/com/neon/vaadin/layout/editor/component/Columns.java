@@ -2,7 +2,6 @@ package com.neon.vaadin.layout.editor.component;
 
 import com.neon.layout.ActionsHorizontalLayout;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
-import com.neon.vaadin.layout.editor.SourceComponentsHolder;
 import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
 import com.neon.vaadin.layout.editor.component.model.ColumnsComponentModel;
 import com.vaadin.data.Property;
@@ -29,9 +28,9 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent<Col
     private final OptionGroup optionGroup = new OptionGroup();
 
 
-    Columns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
-        this.left = new Block( editorViewFactory, sourceComponentsHolder );
-        this.right = new Block( editorViewFactory, sourceComponentsHolder );
+    Columns( EditorViewFactory editorViewFactory ) {
+        this.left = new Block( editorViewFactory );
+        this.right = new Block( editorViewFactory );
 
         VerticalLayout leftLayout = new VerticalLayout( left );
         leftLayout.setMargin( new MarginInfo( false, true, false, false ) );
@@ -42,8 +41,6 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent<Col
         split.setFirstComponent( leftLayout );
         split.setSecondComponent( rightLayout );
         split.setLocked( true );
-//        split.setMinSplitPosition( 100 / 3, Unit.PERCENTAGE );
-//        split.setMaxSplitPosition( 100 - ( 100 / 3 ), Unit.PERCENTAGE );
 
         setSpacing( true );
 
@@ -57,7 +54,7 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent<Col
         actions.setSizeUndefined();
         settingsComponent.setSizeUndefined();
         upper.setComponentAlignment( actions, Alignment.TOP_LEFT );
-        upper.setComponentAlignment( settingsComponent, Alignment.MIDDLE_RIGHT );
+        upper.setComponentAlignment( settingsComponent, Alignment.TOP_RIGHT );
 
         addComponent( upper );
         addComponent( split );
@@ -68,6 +65,7 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent<Col
     private OptionGroup createOptions() {
         optionGroup.setNullSelectionAllowed( false );
         optionGroup.setHtmlContentAllowed( true );
+        optionGroup.addStyleName( "size" );
 
         optionGroup.addValueChangeListener( listener -> {
             Property property = listener.getProperty();
@@ -127,13 +125,4 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent<Col
         return model;
     }
 
-    void setRemoveFromExternalSource(boolean removeFromExternalSource) {
-        this.left.setRemoveFromExternalSource( removeFromExternalSource );
-        this.right.setRemoveFromExternalSource( removeFromExternalSource );
-    }
-
-    @Override
-    public boolean isRemoveFromExternalSource() {
-        return this.left.isRemoveFromExternalSource() && this.right.isRemoveFromExternalSource();
-    }
 }

@@ -11,9 +11,21 @@
   .component {
     padding: 10px;
     border: 1px dashed gray;
+
+    .actions-container .action {
+      padding: 0;
+      .v-icon {
+        vertical-align: inherit;
+      }
+    }
   }
 
   .component-block {
+
+    .block-element-container {
+      padding: 10px;
+      border: 1px dashed lightgray;
+    }
 
     .component-block-contents {
       border: 1px dashed #cccccc;
@@ -23,11 +35,15 @@
   .component-columns {
 
     .v-splitpanel-horizontal .v-margin-right {
-      padding-right: 10px;
+      padding-right: 5px;
     }
     .v-splitpanel-horizontal .v-margin-left {
-      padding-left: 10px;
+      padding-left: 5px;
       padding-right: 1px;
+    }
+
+    .size .v-radiobutton {
+      display: inline;
     }
   }
 }

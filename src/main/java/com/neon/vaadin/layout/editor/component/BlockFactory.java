@@ -1,7 +1,6 @@
 package com.neon.vaadin.layout.editor.component;
 
 import com.neon.vaadin.layout.editor.EditorViewFactory;
-import com.neon.vaadin.layout.editor.SourceComponentsHolder;
 
 public class BlockFactory {
 
@@ -9,11 +8,9 @@ public class BlockFactory {
 
     }
 
-    public static Block create( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder,
-                                boolean removeFromExternalSource ) {
-        Block block = new Block(editorViewFactory, sourceComponentsHolder);
+    public static Block create( EditorViewFactory editorViewFactory ) {
+        Block block = new Block( editorViewFactory );
         block.addStyleName( "component" );
-        block.setRemoveFromExternalSource( removeFromExternalSource );
         return block;
     }
 

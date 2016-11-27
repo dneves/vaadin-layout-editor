@@ -6,7 +6,6 @@ import com.neon.dummy.DummyContentsView;
 import com.neon.dummy.LayoutEditorViewFactory;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.LayoutEditor;
-import com.neon.vaadin.layout.editor.SourceComponentsHolder;
 import com.neon.vaadin.layout.editor.component.Block;
 import com.neon.vaadin.layout.editor.component.BlockFactory;
 import com.neon.vaadin.layout.editor.component.Columns;
@@ -41,16 +40,13 @@ import java.util.UUID;
 @Theme("mytheme")
 public class MyUI extends UI {
 
-    final boolean removeFromExternalSource = false;
-
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final EditorViewFactory editorViewFactory = new LayoutEditorViewFactory();
 
         final DummyContentsView dummyContentsView = new DummyContentsView();
 
-        final LayoutEditor editor = new LayoutEditor( editorViewFactory, dummyContentsView );
-        editor.setRemoveFromExternalSource( removeFromExternalSource );
+        final LayoutEditor editor = new LayoutEditor( editorViewFactory );
 
         VerticalLayout root = new VerticalLayout();
 
@@ -70,7 +66,7 @@ public class MyUI extends UI {
         setContent( root );
 
 
-        setModel( editor, editorViewFactory, dummyContentsView );
+        setModel( editor, editorViewFactory );
     }
 
 
@@ -114,18 +110,18 @@ public class MyUI extends UI {
         notification.show(Page.getCurrent() );
     }
 
-    private void setModel( LayoutEditor editor, EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
+    private void setModel( LayoutEditor editor, EditorViewFactory editorViewFactory ) {
         List<LayoutEditorComponent > model = new LinkedList<>();
 
-        model.add( createBlock( editorViewFactory, sourceComponentsHolder ) );
-        model.add( createColumns( editorViewFactory, sourceComponentsHolder ) );
-        model.add( createBlock( editorViewFactory, sourceComponentsHolder ) );
+        model.add( createBlock( editorViewFactory ) );
+        model.add( createColumns( editorViewFactory ) );
+        model.add( createBlock( editorViewFactory ) );
 
         editor.setModel( model );
     }
 
-    private LayoutEditorComponent createBlock(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
-        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
+    private LayoutEditorComponent createBlock( EditorViewFactory editorViewFactory ) {
+        Block block = BlockFactory.create( editorViewFactory );
 
         List<Draggable> draggables = new LinkedList<>();
         draggables.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
@@ -138,8 +134,8 @@ public class MyUI extends UI {
         return block;
     }
 
-    private LayoutEditorComponent createColumns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
-        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
+    private LayoutEditorComponent createColumns( EditorViewFactory editorViewFactory ) {
+        Columns columns = ColumnsFactory.create( editorViewFactory );
 
         List<Draggable> left = new LinkedList<>();
         left.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
