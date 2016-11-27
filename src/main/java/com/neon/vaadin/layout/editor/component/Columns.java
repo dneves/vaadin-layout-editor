@@ -57,7 +57,7 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent {
         upper.setSizeFull();
         actions.setSizeUndefined();
         settingsComponent.setSizeUndefined();
-        upper.setComponentAlignment( actions, Alignment.MIDDLE_LEFT );
+        upper.setComponentAlignment( actions, Alignment.TOP_LEFT );
         upper.setComponentAlignment( settingsComponent, Alignment.MIDDLE_RIGHT );
 
         addComponent( upper );
