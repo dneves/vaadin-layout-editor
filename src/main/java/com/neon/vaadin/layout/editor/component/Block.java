@@ -32,7 +32,7 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
     private final SourceComponentsHolder sourceComponentsHolder;
 
 
-    protected Block(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
+    protected Block( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         this.editorViewFactory = editorViewFactory;
         this.sourceComponentsHolder = sourceComponentsHolder;
 
@@ -45,6 +45,16 @@ public class Block extends VerticalLayout implements LayoutEditorComponent {
 
         addStyleName( "component-block" );
     }
+
+    @Override
+    public boolean isRemoveFromExternalSource() {
+        return contents.isRemoveFromExternalSource();
+    }
+
+    public void setRemoveFromExternalSource(boolean removeFromExternalSource ) {
+        contents.setRemoveFromExternalSource( removeFromExternalSource );
+    }
+
 
     @Override
     public void addAction( Action action, Button.ClickListener listener ) {

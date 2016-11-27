@@ -9,9 +9,11 @@ public class BlockFactory {
 
     }
 
-    public static Block create(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
+    public static Block create( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder,
+                                boolean removeFromExternalSource ) {
         Block block = new Block(editorViewFactory, sourceComponentsHolder);
         block.addStyleName( "component" );
+        block.setRemoveFromExternalSource( removeFromExternalSource );
         return block;
     }
 

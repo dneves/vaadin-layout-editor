@@ -39,6 +39,9 @@ public class LayoutEditor extends VerticalLayout {
     private final EditorComponentDecorator editorComponentDecorator;
 
 
+    private boolean removeFromExternalSource = true;
+
+
     public LayoutEditor( EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder ) {
         this.editorViewFactory = editorViewFactory;
         this.sourceComponentsHolder = sourceComponentsHolder;
@@ -83,7 +86,7 @@ public class LayoutEditor extends VerticalLayout {
     }
 
     private void addBlock() {
-        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder);
+        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
         editorComponentDecorator.decorate( block, layout );
 
@@ -91,11 +94,19 @@ public class LayoutEditor extends VerticalLayout {
     }
 
     private void addColumns() {
-        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder );
+        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
         editorComponentDecorator.decorate( columns, layout );
 
         layout.addComponent( columns );
     }
 
+    public void setRemoveFromExternalSource(boolean removeFromExternalSource) {
+        this.removeFromExternalSource = removeFromExternalSource;
+        layout.setRemoveFromExternalSource( removeFromExternalSource );
+    }
+
+    public boolean isRemoveFromExternalSource() {
+        return removeFromExternalSource;
+    }
 }

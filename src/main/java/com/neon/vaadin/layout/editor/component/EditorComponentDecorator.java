@@ -21,7 +21,9 @@ public class EditorComponentDecorator {
 
             container.removeComponent( component );
 
-            models.forEach( sourceComponentsHolder::give );
+            if ( component.isRemoveFromExternalSource() ) {
+                models.forEach(sourceComponentsHolder::give);
+            }
         } );
         component.addAction( new Action( "up"), event -> container.moveUp( component ));
         component.addAction( new Action( "down"), event -> container.moveDown( component ));

@@ -26,7 +26,7 @@ public abstract class OrderableVerticalLayout< T extends Draggable > extends Ver
 
     }
 
-    private final DropHandler dropHandler = new OrderableVerticalLayoutDropHandler( this );
+    private final OrderableVerticalLayoutDropHandler dropHandler = new OrderableVerticalLayoutDropHandler( this );
 
     private final Spacer spacer;
 
@@ -48,6 +48,15 @@ public abstract class OrderableVerticalLayout< T extends Draggable > extends Ver
             }
         });
     }
+
+    public void setRemoveFromExternalSource( boolean removeFromExternalSource ) {
+        dropHandler.setRemoveFromExternalSource( removeFromExternalSource );
+    }
+
+    public boolean isRemoveFromExternalSource() {
+        return dropHandler.isRemoveFromExternalSource();
+    }
+
 
     private void addSpacer() {
         super.addComponent( spacer );

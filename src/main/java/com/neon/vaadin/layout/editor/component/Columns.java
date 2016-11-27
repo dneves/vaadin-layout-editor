@@ -124,4 +124,13 @@ public class Columns extends VerticalLayout implements LayoutEditorComponent {
         return models.get( 0 );
     }
 
+    public void setRemoveFromExternalSource( boolean removeFromExternalSource ) {
+        this.left.setRemoveFromExternalSource( removeFromExternalSource );
+        this.right.setRemoveFromExternalSource( removeFromExternalSource );
+    }
+
+    @Override
+    public boolean isRemoveFromExternalSource() {
+        return this.left.isRemoveFromExternalSource() && this.right.isRemoveFromExternalSource();
+    }
 }

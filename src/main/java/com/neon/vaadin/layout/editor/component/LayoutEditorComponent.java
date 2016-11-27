@@ -15,4 +15,6 @@ public interface LayoutEditorComponent extends Component {
 
     List< List< Draggable > > getModel();
 
+    boolean isRemoveFromExternalSource();
+
 }

@@ -9,9 +9,11 @@ public class ColumnsFactory {
 
     }
 
-    public static Columns create(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
+    public static Columns create(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder,
+                                 boolean removeFromExternalSource ) {
         Columns columns = new Columns(editorViewFactory, sourceComponentsHolder);
         columns.addStyleName( "component" );
+        columns.setRemoveFromExternalSource( removeFromExternalSource );
         return columns;
     }
 

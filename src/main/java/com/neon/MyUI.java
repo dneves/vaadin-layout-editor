@@ -34,6 +34,8 @@ import java.util.UUID;
 @Theme("mytheme")
 public class MyUI extends UI {
 
+    final boolean removeFromExternalSource = false;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final EditorViewFactory editorViewFactory = new LayoutEditorViewFactory();
@@ -41,6 +43,7 @@ public class MyUI extends UI {
         final DummyContentsView dummyContentsView = new DummyContentsView();
 
         final LayoutEditor editor = new LayoutEditor( editorViewFactory, dummyContentsView );
+        editor.setRemoveFromExternalSource( removeFromExternalSource );
 
         final HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
@@ -64,7 +67,7 @@ public class MyUI extends UI {
     }
 
     private LayoutEditorComponent createBlock(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
-        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder);
+        Block block = BlockFactory.create(editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
         List<List<Draggable>> model = new LinkedList<>();
         List<Draggable> draggables = new LinkedList<>();
@@ -77,7 +80,7 @@ public class MyUI extends UI {
     }
 
     private LayoutEditorComponent createColumns(EditorViewFactory editorViewFactory, SourceComponentsHolder sourceComponentsHolder) {
-        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder);
+        Columns columns = ColumnsFactory.create( editorViewFactory, sourceComponentsHolder, removeFromExternalSource );
 
         List<List<Draggable>> model = new LinkedList<>();
 
