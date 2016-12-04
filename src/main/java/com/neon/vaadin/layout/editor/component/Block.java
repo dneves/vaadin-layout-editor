@@ -4,11 +4,10 @@ import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.layout.ActionsHorizontalLayout;
 import com.neon.layout.OrderableVerticalLayout;
+import com.neon.vaadin.layout.editor.Action;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
-import com.vaadin.event.Action;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
@@ -50,8 +49,8 @@ public class Block extends VerticalLayout implements LayoutEditorComponent<Block
     }
 
     @Override
-    public void addAction( Action action, Button.ClickListener listener ) {
-        actions.addAction( action, listener );
+    public void addAction(com.neon.vaadin.layout.editor.Action action) {
+        actions.addAction( action );
     }
 
     @Override
@@ -88,9 +87,9 @@ public class Block extends VerticalLayout implements LayoutEditorComponent<Block
 
         DraggableComponent cDraggableComponent = new DraggableComponent( elementWrapper );
 
-        elementWrapper.addAction( new Action( "", new ThemeResource( "icons/cancel-12x12.png" ) ), event -> {
+        elementWrapper.addAction( new Action( "", new ThemeResource( "icons/cancel-12x12.png" ), () -> {
             Block.this.contents.removeComponent( cDraggableComponent );
-        } );
+        } ) );
 
         return cDraggableComponent;
     }

@@ -2,13 +2,10 @@ package com.neon.vaadin.layout.editor;
 
 import com.neon.dnd.DraggableComponent;
 import com.neon.layout.OrderableVerticalLayout;
-import com.neon.vaadin.layout.editor.component.Block;
-import com.neon.vaadin.layout.editor.component.BlockFactory;
-import com.neon.vaadin.layout.editor.component.Columns;
-import com.neon.vaadin.layout.editor.component.ColumnsFactory;
+import com.neon.vaadin.layout.editor.component.DynamicBlock;
+import com.neon.vaadin.layout.editor.component.DynamicFactory;
 import com.neon.vaadin.layout.editor.component.EditorComponentDecorator;
 import com.neon.vaadin.layout.editor.component.LayoutEditorComponent;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,9 +29,7 @@ public class LayoutEditor extends VerticalLayout {
         }
     };
 
-    private final Button buttonBlock = new Button( "Bloco", event -> addBlock());
-
-    private final Button buttonColumns = new Button( "Colunas", event -> addColumns());
+    private final Button buttonDynamic = new Button( "Bloco", event -> addDynamic() );
 
 
     private final EditorViewFactory editorViewFactory;
@@ -59,24 +54,16 @@ public class LayoutEditor extends VerticalLayout {
         Panel layoutContainer = new Panel( layout );
         this.addComponent( layoutContainer );
 
-        buttonBlock.setIcon( new ThemeResource( "icons/block-24x24.png" ) );
-        buttonColumns.setIcon( new ThemeResource( "icons/columns-24x24.png" ) );
-
         HorizontalLayout actions = new HorizontalLayout();
         actions.setSpacing( true );
         actions.addStyleName( "editor-actions-container" );
-        actions.addComponent( buttonBlock );
-        actions.addComponent( buttonColumns );
+        actions.addComponent( buttonDynamic );
         this.addComponent( actions );
     }
 
     public void setModel(List<LayoutEditorComponent> components) {
         components.forEach( component -> {
-            if ( component instanceof Block ) {
-                editorComponentDecorator.decorate((Block) component, layout );
-            } else if ( component instanceof Columns ) {
-                editorComponentDecorator.decorate((Columns) component, layout );
-            }
+            editorComponentDecorator.decorate( component, layout );
             layout.addComponent( component );
         } );
     }
@@ -93,20 +80,11 @@ public class LayoutEditor extends VerticalLayout {
         return model;
     }
 
-    private void addBlock() {
-        Block block = BlockFactory.create( editorViewFactory );
+    private void addDynamic() {
+        DynamicBlock dynamicBlock = DynamicFactory.create(editorViewFactory);
 
-        editorComponentDecorator.decorate( block, layout );
+        editorComponentDecorator.decorate( dynamicBlock, layout );
 
-        layout.addComponent( block );
+        layout.addComponent( dynamicBlock );
     }
-
-    private void addColumns() {
-        Columns columns = ColumnsFactory.create( editorViewFactory );
-
-        editorComponentDecorator.decorate( columns, layout );
-
-        layout.addComponent( columns );
-    }
-
 }

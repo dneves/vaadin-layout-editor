@@ -12,7 +12,7 @@
     padding: 10px;
     border: 1px dashed gray;
 
-    .actions-container .action {
+    .action {
       padding: 0;
       .v-icon {
         vertical-align: inherit;
@@ -32,16 +32,12 @@
     }
   }
 
-  .component-columns {
+  .component-dynamic {
+    .container .v-slot-big { width: 67% !important; }
+    .container .v-slot-small { width: 33% !important; }
+  }
 
-    .v-splitpanel-horizontal .v-margin-right {
-      padding-right: 5px;
-    }
-    .v-splitpanel-horizontal .v-margin-left {
-      padding-left: 5px;
-      padding-right: 1px;
-    }
-
+  .component-columns, .component-dynamic {
     .size .v-radiobutton {
       display: inline;
     }

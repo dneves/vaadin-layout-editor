@@ -2,10 +2,8 @@ package com.neon.vaadin.layout.editor.component;
 
 import com.neon.dnd.Draggable;
 import com.neon.layout.ActionsHorizontalLayout;
+import com.neon.vaadin.layout.editor.Action;
 import com.neon.vaadin.layout.editor.IdHolder;
-import com.vaadin.event.Action;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 
 public class BlockElementWrapper extends VerticalLayout implements Draggable {
@@ -26,8 +24,8 @@ public class BlockElementWrapper extends VerticalLayout implements Draggable {
         addComponent( draggable );
     }
 
-    public void addAction(Action action, Button.ClickListener listener ) {
-        actions.addAction( action, listener );
+    public void addAction( Action action ) {
+        actions.addAction( action );
     }
 
     @Override

@@ -8,11 +8,11 @@ import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.LayoutEditor;
 import com.neon.vaadin.layout.editor.component.Block;
 import com.neon.vaadin.layout.editor.component.BlockFactory;
-import com.neon.vaadin.layout.editor.component.Columns;
-import com.neon.vaadin.layout.editor.component.ColumnsFactory;
+import com.neon.vaadin.layout.editor.component.DynamicBlock;
+import com.neon.vaadin.layout.editor.component.DynamicFactory;
 import com.neon.vaadin.layout.editor.component.LayoutEditorComponent;
 import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
-import com.neon.vaadin.layout.editor.component.model.ColumnsComponentModel;
+import com.neon.vaadin.layout.editor.component.model.DynamicBlockModel;
 import com.neon.vaadin.layout.editor.component.model.EditorComponentModel;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -26,6 +26,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import javax.servlet.annotation.WebServlet;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -87,22 +88,6 @@ public class MyUI extends UI {
                     sb.append( " " );
                 } );
                 sb.append( "<br><br>" );
-            } else if ( editorComponentModel instanceof ColumnsComponentModel ) {
-                Object sizes = ((ColumnsComponentModel) editorComponentModel).getSizes();
-                List<Draggable> contents1 = ((ColumnsComponentModel) editorComponentModel).getColumn1().getContents();
-                List<Draggable> contents2 = ((ColumnsComponentModel) editorComponentModel).getColumn2().getContents();
-                sb.append(component).append(" => ").append(sizes).append(" [ ").append(contents1.size()).append(", ").append(contents2.size()).append(" ]");
-
-                sb.append( "<br>[ " );
-                contents1.forEach( d -> {
-                    sb.append(d.getModel().getId()).append(" ");
-                } );
-                sb.append( "]" );
-                sb.append( "<br>[ " );
-                contents2.forEach( d -> {
-                    sb.append(d.getModel().getId()).append(" ");
-                } );
-                sb.append( "]<br><br>" );
             }
         } );
 
@@ -113,11 +98,28 @@ public class MyUI extends UI {
     private void setModel( LayoutEditor editor, EditorViewFactory editorViewFactory ) {
         List<LayoutEditorComponent > model = new LinkedList<>();
 
-        model.add( createBlock( editorViewFactory ) );
-        model.add( createColumns( editorViewFactory ) );
+        model.add( createDynamicBlock( editorViewFactory ) );
         model.add( createBlock( editorViewFactory ) );
 
         editor.setModel( model );
+    }
+
+    private LayoutEditorComponent createDynamicBlock( EditorViewFactory editorViewFactory ) {
+        DynamicBlock dynamicBlock = DynamicFactory.create(editorViewFactory);
+
+        List<Draggable> draggables = new LinkedList<>();
+        draggables.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
+        draggables.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
+
+        BlockComponentModel blockComponentModel = new BlockComponentModel();
+        blockComponentModel.setContents( draggables );
+
+        DynamicBlockModel model = new DynamicBlockModel();
+        model.setBlocks(Arrays.asList( blockComponentModel ) );
+
+        dynamicBlock.setModel( model );
+
+        return dynamicBlock;
     }
 
     private LayoutEditorComponent createBlock( EditorViewFactory editorViewFactory ) {
@@ -134,32 +136,6 @@ public class MyUI extends UI {
         return block;
     }
 
-    private LayoutEditorComponent createColumns( EditorViewFactory editorViewFactory ) {
-        Columns columns = ColumnsFactory.create( editorViewFactory );
-
-        List<Draggable> left = new LinkedList<>();
-        left.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-        left.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-
-        BlockComponentModel blockComponentModel1 = new BlockComponentModel();
-        blockComponentModel1.setContents( left );
-
-        List<Draggable> right = new LinkedList<>();
-        right.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-        right.add( editorViewFactory.create( new Content(UUID.randomUUID().toString()) ) );
-
-        BlockComponentModel blockComponentModel2 = new BlockComponentModel();
-        blockComponentModel2.setContents( right );
-
-        ColumnsComponentModel columnsComponentModel = new ColumnsComponentModel();
-        columnsComponentModel.setSizes( "left" );
-        columnsComponentModel.setColumn1( blockComponentModel1 );
-        columnsComponentModel.setColumn2( blockComponentModel2 );
-
-        columns.setModel( columnsComponentModel );
-
-        return columns;
-    }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
