@@ -2,7 +2,6 @@ package com.neon;
 
 import com.neon.dnd.Draggable;
 import com.neon.dummy.Content;
-import com.neon.dummy.DummyContentsView;
 import com.neon.dummy.LayoutEditorViewFactory;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.LayoutEditor;
@@ -99,7 +98,7 @@ public class MyUI extends UI {
         List<LayoutEditorComponent > model = new LinkedList<>();
 
         model.add( createDynamicBlock( editorViewFactory ) );
-        model.add( createBlock( editorViewFactory ) );
+//        model.add( createBlock( editorViewFactory ) );
 
         editor.setModel( model );
     }

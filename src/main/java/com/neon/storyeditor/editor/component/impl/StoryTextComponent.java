@@ -13,7 +13,7 @@ public class StoryTextComponent extends StoryEditorComponent< String, String > {
     private static final long serialVersionUID = 221710005716935498L;
     private final InlineTextEditor textEditor = new InlineTextEditor();
 
-    final StoryComponentAction actionEdit = new StoryComponentAction( null, "editar", null ) {
+    final StoryComponentAction actionEdit = new StoryComponentAction( "edit", "edit", null ) {
         private static final long serialVersionUID = 411410720059703604L;
 
         @Override
@@ -21,7 +21,7 @@ public class StoryTextComponent extends StoryEditorComponent< String, String > {
             toggle( true );
         }
     };
-    final StoryComponentAction actionStopEdit = new StoryComponentAction( null, "guardar", null ) {
+    final StoryComponentAction actionStopEdit = new StoryComponentAction( "save", "save", null ) {
         private static final long serialVersionUID = -5135897716313524228L;
 
         @Override

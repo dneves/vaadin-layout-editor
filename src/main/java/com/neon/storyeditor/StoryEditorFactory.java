@@ -28,7 +28,7 @@ public class StoryEditorFactory {
         itemPaletteSpacer.setParentDraggableComponent(draggableComponent);
 
         // add editor actions
-        editorComponent.addAction( IStoryEditorActionHandler.Position.RIGHT, new StoryComponentAction( null, "Mover para baixo", null ) {
+        editorComponent.addAction( IStoryEditorActionHandler.Position.RIGHT, new StoryComponentAction( "down", "Mover para baixo", null ) {
 
             private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class StoryEditorFactory {
             }
         } );
 
-        editorComponent.addAction( IStoryEditorActionHandler.Position.RIGHT, new StoryComponentAction( null, "Mover para cima", null ) {
+        editorComponent.addAction( IStoryEditorActionHandler.Position.RIGHT, new StoryComponentAction( "up", "Mover para cima", null ) {
 
             private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class StoryEditorFactory {
             }
         } );
 
-        editorComponent.addAction( IStoryEditorActionHandler.Position.LEFT, new StoryComponentAction( null, "Apagar Elemento", null ) {
+        editorComponent.addAction( IStoryEditorActionHandler.Position.LEFT, new StoryComponentAction( "x", "Apagar Elemento", null ) {
 
             private static final long serialVersionUID = 1L;
 
