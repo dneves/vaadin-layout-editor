@@ -45,7 +45,7 @@ public class MyUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         final EditorViewFactory editorViewFactory = new LayoutEditorViewFactory();
 
-        final DummyContentsView dummyContentsView = new DummyContentsView();
+//        final DummyContentsView dummyContentsView = new DummyContentsView();
 
         final LayoutEditor editor = new LayoutEditor( editorViewFactory );
 
@@ -56,9 +56,9 @@ public class MyUI extends UI {
         layout.setSpacing( true );
         layout.setMargin( true );
         layout.addComponent( editor );
-        layout.addComponent( dummyContentsView );
-        layout.setExpandRatio( editor, 0.7f );
-        layout.setExpandRatio( dummyContentsView, 0.3f );
+//        layout.addComponent( dummyContentsView );
+//        layout.setExpandRatio( editor, 0.7f );
+//        layout.setExpandRatio( dummyContentsView, 0.3f );
 
         root.addComponent( layout );
         root.addComponent( new Button( "save", listener -> {
