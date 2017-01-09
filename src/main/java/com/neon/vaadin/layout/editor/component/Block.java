@@ -3,7 +3,7 @@ package com.neon.vaadin.layout.editor.component;
 import com.neon.dnd.Draggable;
 import com.neon.dnd.DraggableComponent;
 import com.neon.layout.ActionsHorizontalLayout;
-import com.neon.layout.OrderableVerticalLayout;
+import com.neon.vaadin.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.Action;
 import com.neon.vaadin.layout.editor.EditorViewFactory;
 import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
@@ -19,10 +19,16 @@ public class Block extends VerticalLayout implements LayoutEditorComponent<Block
     private final EditorViewFactory editorViewFactory;
 
     private final OrderableVerticalLayout contents = new OrderableVerticalLayout( "arraste para aqui" ) {
+//        @Override
+//        protected DraggableComponent create( DraggableComponent draggableComponent) {
+//            Draggable draggable = draggableComponent.getRoot();
+//            return Block.this.create( draggable );
+//        }
+
+
         @Override
-        protected DraggableComponent create( DraggableComponent draggableComponent) {
-            Draggable draggable = draggableComponent.getRoot();
-            return Block.this.create( draggable );
+        protected com.neon.vaadin.dnd.DraggableComponent create(com.neon.vaadin.dnd.DraggableComponent draggable) {
+            return null;
         }
 
         @Override

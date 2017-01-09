@@ -1,19 +1,14 @@
-package com.neon.dnd;
+package com.neon.vaadin.dnd;
 
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DragAndDropWrapper;
 
-@Deprecated
 public class DroppableComponent< T extends Component > extends DragAndDropWrapper {
 
     private final T root;
 
-    public DroppableComponent( T root ) {
-        this( root, null );
-    }
-
-    public DroppableComponent(T root, DropHandler dropHandler ) {
+    public DroppableComponent( T root, DropHandler dropHandler ) {
         super(root);
         this.root = root;
         this.setDropHandler( dropHandler );

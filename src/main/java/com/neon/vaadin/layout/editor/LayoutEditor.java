@@ -1,7 +1,7 @@
 package com.neon.vaadin.layout.editor;
 
 import com.neon.dnd.DraggableComponent;
-import com.neon.layout.OrderableVerticalLayout;
+import com.neon.vaadin.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.component.DynamicBlock;
 import com.neon.vaadin.layout.editor.component.DynamicFactory;
 import com.neon.vaadin.layout.editor.component.EditorComponentDecorator;
@@ -19,7 +19,7 @@ public class LayoutEditor extends VerticalLayout {
 
     private final OrderableVerticalLayout layout = new OrderableVerticalLayout( "adicione componentes" ) {
         @Override
-        protected DraggableComponent create( DraggableComponent draggable) {
+        protected com.neon.vaadin.dnd.DraggableComponent create(com.neon.vaadin.dnd.DraggableComponent draggable) {
             return null;
         }
 

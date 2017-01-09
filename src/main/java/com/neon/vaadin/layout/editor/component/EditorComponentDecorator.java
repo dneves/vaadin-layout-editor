@@ -1,7 +1,7 @@
 package com.neon.vaadin.layout.editor.component;
 
 import com.neon.vaadin.layout.editor.Action;
-import com.neon.layout.OrderableVerticalLayout;
+import com.neon.vaadin.layout.OrderableVerticalLayout;
 import com.vaadin.server.ThemeResource;
 
 public class EditorComponentDecorator {

@@ -1,14 +1,12 @@
-package com.neon.dnd;
+package com.neon.vaadin.dnd;
 
-import com.neon.vaadin.layout.editor.IdHolder;
 import com.vaadin.ui.DragAndDropWrapper;
 
-@Deprecated
-public class DraggableComponent< M extends IdHolder > extends DragAndDropWrapper {
+public class DraggableComponent< M > extends DragAndDropWrapper {
 
     private final Draggable< M > root;
 
-    public DraggableComponent( Draggable< M > root ) {
+    public DraggableComponent(Draggable< M > root) {
         super(root);
         this.root = root;
         this.setDragStartMode( DragStartMode.WRAPPER );
