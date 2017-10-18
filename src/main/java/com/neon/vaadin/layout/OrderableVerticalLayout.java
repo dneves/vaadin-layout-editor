@@ -3,7 +3,6 @@ package com.neon.vaadin.layout;
 import com.neon.vaadin.dnd.Draggable;
 import com.neon.vaadin.dnd.DraggableComponent;
 import com.neon.vaadin.dnd.DroppableComponent;
-import com.neon.vaadin.upload.DesktopDropHandler;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -27,19 +26,10 @@ public abstract class OrderableVerticalLayout extends VerticalLayout {
 
     }
 
-    private final OrderableVerticalLayoutDropHandler dropHandler;
-
     private final Spacer spacer;
 
-
-    public OrderableVerticalLayout( String dropLabel ) {
-        this( dropLabel, null );
-    }
-
-    public OrderableVerticalLayout(String dropLabel, DesktopDropHandler desktopDropHandler ) {
-        this.dropHandler = new OrderableVerticalLayoutDropHandler( this, desktopDropHandler );
-
-        this.spacer = new Spacer( dropLabel, dropHandler );
+    public OrderableVerticalLayout(String dropLabel) {
+        this.spacer = new Spacer( dropLabel, null );
 
         addSpacer();
 
@@ -73,11 +63,11 @@ public abstract class OrderableVerticalLayout extends VerticalLayout {
                 return ;
             }
 
-            droppableComponent.setDropHandler( dropHandler );
+//            droppableComponent.setDropHandler( dropHandler );
             this.addComponent( droppableComponent, index );
         } else if ( c instanceof Draggable ) {
             DraggableComponent<?> component = new DraggableComponent<>( ( Draggable<?> ) c );
-            component.setDropHandler( dropHandler );
+//            component.setDropHandler( dropHandler );
             this.addComponent( component, index );
         }
     }

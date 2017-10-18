@@ -1,6 +1,5 @@
 package com.neon.vaadin.layout.editor;
 
-import com.neon.dnd.DraggableComponent;
 import com.neon.vaadin.layout.OrderableVerticalLayout;
 import com.neon.vaadin.layout.editor.component.DynamicBlock;
 import com.neon.vaadin.layout.editor.component.DynamicFactory;
@@ -32,15 +31,12 @@ public class LayoutEditor extends VerticalLayout {
     private final Button buttonDynamic = new Button( "Bloco", event -> addDynamic() );
 
 
-    private final EditorViewFactory editorViewFactory;
+    private final EditorComponentDecorator editorComponentDecorator = new EditorComponentDecorator();
 
-    private final EditorComponentDecorator editorComponentDecorator;
+    private final int maxBlocks;
 
-
-    public LayoutEditor( EditorViewFactory editorViewFactory ) {
-        this.editorViewFactory = editorViewFactory;
-
-        this.editorComponentDecorator = new EditorComponentDecorator();
+    public LayoutEditor( int maxBlocks ) {
+        this.maxBlocks = maxBlocks;
 
         setCaption( "Layout");
 
@@ -81,7 +77,7 @@ public class LayoutEditor extends VerticalLayout {
     }
 
     private void addDynamic() {
-        DynamicBlock dynamicBlock = DynamicFactory.create(editorViewFactory);
+        DynamicBlock dynamicBlock = DynamicFactory.create( maxBlocks );
 
         editorComponentDecorator.decorate( dynamicBlock, layout );
 

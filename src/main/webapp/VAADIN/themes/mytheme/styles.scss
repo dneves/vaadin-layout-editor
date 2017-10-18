@@ -10,7 +10,7 @@
 
   .component {
     padding: 10px;
-    border: 1px dashed gray;
+    border: 1px dashed #cccccc;
 
     .action {
       padding: 0;
@@ -21,14 +21,11 @@
   }
 
   .component-block {
+    border: 1px dashed grey;
+    padding: 10px;
 
-    .block-element-container {
-      padding: 10px;
-      border: 1px dashed lightgray;
-    }
-
-    .component-block-contents {
-      border: 1px dashed #cccccc;
+    .component-block-options {
+      width: 64px;
     }
   }
 

@@ -1,15 +1,13 @@
 package com.neon.vaadin.layout.editor.component;
 
-import com.neon.vaadin.layout.editor.EditorViewFactory;
-
 public class DynamicFactory {
 
     private DynamicFactory() {
 
     }
 
-    public static DynamicBlock create( EditorViewFactory editorViewFactory ) {
-        DynamicBlock dynamicBlock = new DynamicBlock( editorViewFactory );
+    public static DynamicBlock create( int maxBlocks ) {
+        DynamicBlock dynamicBlock = new DynamicBlock( maxBlocks );
         dynamicBlock.addStyleName( "component" );
         return dynamicBlock;
     }

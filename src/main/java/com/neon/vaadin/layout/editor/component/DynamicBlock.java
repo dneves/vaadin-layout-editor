@@ -1,52 +1,45 @@
 package com.neon.vaadin.layout.editor.component;
 
-import com.neon.vaadin.layout.editor.Action;
 import com.neon.layout.ActionsHorizontalLayout;
-import com.neon.vaadin.layout.editor.EditorViewFactory;
-import com.neon.vaadin.layout.editor.component.model.BlockComponentModel;
+import com.neon.vaadin.layout.editor.Action;
 import com.neon.vaadin.layout.editor.component.model.DynamicBlockModel;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DynamicBlock extends VerticalLayout implements LayoutEditorComponent< DynamicBlockModel > {
 
     private final ActionsHorizontalLayout actions = new ActionsHorizontalLayout();
 
-    private static final int MAX_BLOCKS = 3;
-
-    private static final int COLUMN_SETTINGS = 2;
-
-    private static final String BIG = "big";
-    private static final String SMALL = "small";
-
-
     private final HorizontalLayout layout = new HorizontalLayout();
 
-    private List< Block > blocks = new ArrayList<>( MAX_BLOCKS );
+    private final int maxBlocks;
+
+    private final List< Block > blocks;
+
+    private final Map< Block, AbstractSelect > selects;
 
 
     private final Button button = new Button( "", new ThemeResource( "icons/add-12x12.png" ) );
 
-    private final OptionGroup optionGroup = new OptionGroup();
 
-
-    private final EditorViewFactory editorViewFactory;
-
-
-    public DynamicBlock( EditorViewFactory editorViewFactory ) {
-        this.editorViewFactory = editorViewFactory;
+    DynamicBlock(int maxBlocks) {
+        this.maxBlocks = maxBlocks;
+        this.blocks = new ArrayList<>( maxBlocks );
+        this.selects = new HashMap<>( maxBlocks );
 
         setSpacing( true );
 
-        setupBlockOptions();
         Component settingsComponent = createSettingsComponent();
 
         HorizontalLayout upper = new HorizontalLayout();
@@ -72,52 +65,58 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
     private void addBlock( Block block ) {
         blocks.add( block );
 
-        button.setEnabled( ( blocks.size() < MAX_BLOCKS ) );
-        optionGroup.setVisible( blocks.size() == COLUMN_SETTINGS );
+        button.setEnabled( ( blocks.size() < maxBlocks ) );
 
-        updateBlockSizes();
+        updateBlockModels();
 
         repaint();
+
+        updateBlockOptions();
     }
 
     private void removeBlock( Block block ) {
         blocks.remove( block );
+        selects.remove( block );
 
-        button.setEnabled( ( blocks.size() < MAX_BLOCKS ) );
-        optionGroup.setVisible( blocks.size() == COLUMN_SETTINGS );
+        button.setEnabled( ( blocks.size() < maxBlocks ) );
 
-        updateBlockSizes();
+        updateBlockModels();
+        updateBlockOptions();
 
         repaint();
     }
 
-    private void updateBlockSizes() {
-        if ( blocks.size() != COLUMN_SETTINGS ) {
-            blocks.forEach( b -> { b.removeStyleName( BIG ); b.removeStyleName( SMALL ); } );
-        } else {
-            String value = String.valueOf( optionGroup.getValue() );
+    private void updateBlockOptions() {
+        int r = maxBlocks / blocks.size();
+        int l = maxBlocks - blocks.size();
 
-            Block left = blocks.get(0);
-            Block right = blocks.get(1);
+        for ( int i = 0; i < blocks.size(); i++ ) {
+            Block block = blocks.get(i);
+            AbstractSelect select = selects.get(block);
 
-            left.removeStyleName( BIG );
-            left.removeStyleName( SMALL );
-            right.removeStyleName( BIG );
-            right.removeStyleName( SMALL );
-
-            if ( "left".equalsIgnoreCase( value ) ) {
-                left.addStyleName( BIG );
-                right.addStyleName( SMALL );
-            } else if ( "right".equalsIgnoreCase( value ) ) {
-                left.addStyleName( SMALL );
-                right.addStyleName( BIG );
+            int nrColumns = r;
+            if ( l <= 1 && i == ( blocks.size() - 1 ) ) {
+                nrColumns = nrColumns + l;
             }
+
+            select.select( nrColumns );
         }
     }
 
+    private void updateBlockModels() {
+        for ( int i = 0; i < blocks.size(); i++ ) {
+            Block block = blocks.get(i);
+            AbstractSelect select = selects.get(block);
+            int nrColumns = select == null ? maxBlocks : ( select.getValue() == null ? maxBlocks : ( int ) select.getValue() );
+
+            block.setModel( new Block.BlockModel( String.valueOf( i + 1 ), nrColumns) );
+        }
+    }
+
+
     private Block createBlock() {
-        Block block = new Block( editorViewFactory );
-        block.setSizeFull();
+        Block block = new Block();
+//        block.setSizeFull();
 
         Action action = new Action();
         action.icon = new ThemeResource("icons/cancel-12x12.png");
@@ -129,12 +128,22 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
         };
         block.addAction( action );
 
+        AbstractSelect blockOptions = createBlockOptions();
+        selects.put( block, blockOptions );
+        block.addSettings(blockOptions);
+
         return block;
     }
 
     private void repaint() {
         layout.removeAllComponents();
-        blocks.forEach( layout::addComponent );
+        blocks.forEach( block -> {
+            AbstractSelect select = selects.get(block);
+            int nrColumns = select == null ? maxBlocks : ( select.getValue() == null ? maxBlocks : ( int ) select.getValue() );
+
+            layout.addComponent( block );
+            layout.setExpandRatio( block, ( ( 100 / maxBlocks ) * nrColumns ) / 100.0f );
+        } );
     }
 
     private Component createSettingsComponent() {
@@ -146,35 +155,28 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
         button.setHeight(24, Unit.PIXELS);
         button.addClickListener( event -> addBlock( createBlock() ));
 
-        layout.addComponent( optionGroup );
         layout.addComponent( button );
 
         return layout;
     }
 
-    private void setupBlockOptions() {
-        optionGroup.setNullSelectionAllowed( false );
-        optionGroup.setHtmlContentAllowed( true );
-        optionGroup.addStyleName( "size" );
-        optionGroup.setVisible( blocks.size() == COLUMN_SETTINGS );
-
-        optionGroup.addValueChangeListener( listener -> {
-            if ( blocks.size() != COLUMN_SETTINGS ) {
-                return ;
-            }
-            updateBlockSizes();
+    private AbstractSelect createBlockOptions() {
+        ComboBox combo = new ComboBox();
+        combo.setNullSelectionAllowed( false );
+        combo.setInputPrompt( "colunas" );
+        combo.setTextInputAllowed( false );
+        combo.setItemCaptionMode( AbstractSelect.ItemCaptionMode.EXPLICIT );
+        combo.addStyleName( "component-block-options" );
+        combo.addValueChangeListener( listener -> {
+            repaint();
         } );
+        for ( int i = 0; i < maxBlocks; i++ ) {
+            combo.addItem(i + 1 );
+            combo.setItemCaption( i+1, "" + ( i + 1 ) );
+        }
+        combo.select( "" + maxBlocks );
 
-        optionGroup.addItem( "left" );
-        optionGroup.setItemCaption( "left", "67/33" );
-
-        optionGroup.addItem( "middle" );
-        optionGroup.setItemCaption( "middle", "50/50" );
-
-        optionGroup.addItem( "right" );
-        optionGroup.setItemCaption( "right", "33/67" );
-
-        optionGroup.select( "middle" );
+        return combo;
     }
 
     @Override
@@ -188,7 +190,7 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
             return ;
         }
 
-        List<BlockComponentModel> blocks = model.getBlocks();
+        List<Block.BlockModel> blocks = model.getBlocks();
         if ( blocks != null && ! blocks.isEmpty() ) {
             this.blocks.clear();
             this.layout.removeAllComponents();
@@ -204,7 +206,18 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
 
     @Override
     public DynamicBlockModel getModel() {
-        return null;
+        List<Block.BlockModel> blockModels = new ArrayList<>( blocks.size() );
+        blocks.forEach( block -> {
+            AbstractSelect select = selects.get(block);
+            Block.BlockModel model = block.getModel();
+            model.nrColumns = ( int ) select.getValue();
+            blockModels.add( model );
+        } );
+
+        DynamicBlockModel model = new DynamicBlockModel();
+        model.setBlocks( blockModels );
+
+        return model;
     }
 
 }

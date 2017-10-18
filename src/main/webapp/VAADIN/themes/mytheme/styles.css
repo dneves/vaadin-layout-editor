@@ -12987,7 +12987,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .component {
 	padding: 10px;
-	border: 1px dashed gray;
+	border: 1px dashed #cccccc;
 }
 
 .mytheme .component .action {
@@ -12998,13 +12998,13 @@ div.v-layout.v-horizontal.v-widget {
 	vertical-align: inherit;
 }
 
-.mytheme .component-block .block-element-container {
+.mytheme .component-block {
+	border: 1px dashed grey;
 	padding: 10px;
-	border: 1px dashed lightgray;
 }
 
-.mytheme .component-block .component-block-contents {
-	border: 1px dashed #cccccc;
+.mytheme .component-block .component-block-options {
+	width: 64px;
 }
 
 .mytheme .component-dynamic .container .v-slot-big {
