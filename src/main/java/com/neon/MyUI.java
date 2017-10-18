@@ -32,7 +32,7 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        final LayoutEditor editor = new LayoutEditor( 4 );
+        final LayoutEditor editor = new LayoutEditor( 5 );
 
         VerticalLayout root = new VerticalLayout();
 

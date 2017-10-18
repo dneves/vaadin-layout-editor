@@ -90,6 +90,11 @@ public class DynamicBlock extends VerticalLayout implements LayoutEditorComponen
         int r = maxBlocks / blocks.size();
         int l = maxBlocks - blocks.size();
 
+//        nr max opcoes = maxBlocks - blocks.size() + 1
+//        E DEPOIS -> ajustar os restantes com o que sobra
+//              quando aumentas 8====> roubar a diferenca à maior ( abs( nrColunasNovo - nrColunasAntigo ) )
+//              quando diminuis 8=> dar ao mais pequeno (para nao ficar triste) a diferenca ( abs( nrColunasNovo - nrColunasAntigo ) )
+
         for ( int i = 0; i < blocks.size(); i++ ) {
             Block block = blocks.get(i);
             AbstractSelect select = selects.get(block);
